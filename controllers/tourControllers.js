@@ -1,3 +1,20 @@
+const checkId =(req, res, next, val) => {
+    console.log(`The tour val is ${val}`)
+    if(req.params.id > 5){
+        return res.status(404).send({status : "Invalid Id"})
+    }
+    res.status(200).send({status : "Id is Present"})
+}
+
+const checkBody = (req, res, next) => {
+    const {name, price} = req.body
+    if(!name || !price){
+        return res.status(404).send({status : "Name or Price is missing"})
+    }
+    res.status(200).send({status : req.body})
+    next()
+}
+
 const getAllTours = async(req, res) => {
     try {
         res.status(200).json("Hello Made It")
@@ -35,4 +52,4 @@ const deleteTour = async(req, res) => {
 }
 
 
-module.exports = {getAllTours, createAllTours, getTour, updateTour, deleteTour}
+module.exports = {getAllTours, createAllTours, getTour, updateTour, deleteTour, checkId, checkBody}

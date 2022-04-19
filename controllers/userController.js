@@ -5,6 +5,7 @@ const getAllUsers = async(req, res) => {
         console.log(error)
     }
 }
+
 const createAllUsers = async(req, res) => {
     try {
         res.status(200).json("Hello Made It")
@@ -12,6 +13,7 @@ const createAllUsers = async(req, res) => {
         console.log(error)
     }
 }
+
 const getUser = async(req, res) => {
     try {
         res.status(200).json("Hello Made It")
