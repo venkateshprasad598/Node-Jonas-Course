@@ -48,5 +48,4 @@ price : {
 
 //KEEP TOUR NAME IN CAPS
 const Tour = mongoose.model("Tour", TourSchema)
-
 module.exports = Tour
