@@ -1,3 +1,5 @@
+const Tours = require("../models/Tours")
+
 const checkId =(req, res, next, val) => {
     console.log(`The tour val is ${val}`)
     if(req.params.id > 5){
@@ -11,7 +13,6 @@ const checkBody = (req, res, next) => {
     if(!name || !price){
         return res.status(404).send({status : "Name or Price is missing"})
     }
-    res.status(200).send({status : req.body})
     next()
 }
 
@@ -24,6 +25,8 @@ const getAllTours = async(req, res) => {
 }
 const createAllTours = async(req, res) => {
     try {
+        const Tour = await Tours.create(req.body)
+        console.log(Tour, "Hello")
         res.status(200).json("Hello Made It")
     } catch (error) {
         console.log(error)
