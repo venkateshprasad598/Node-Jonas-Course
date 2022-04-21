@@ -1,11 +1,11 @@
-const Tours = require("../models/Tours")
+const Tours = require("../models/tourModel")
 
 const checkId =(req, res, next, val) => {
     console.log(`The tour val is ${val}`)
     if(req.params.id > 5){
         return res.status(404).send({status : "Invalid Id"})
     }
-    res.status(200).send({status : "Id is Present"})
+    next()
 }
 
 const checkBody = (req, res, next) => {
@@ -18,25 +18,28 @@ const checkBody = (req, res, next) => {
 
 const getAllTours = async(req, res) => {
     try {
-        res.status(200).json("Hello Made It")
+        const tour = await Tours.find()
+        res.status(200).json({status : "success", data : {tour}})
+
     } catch (error) {
-        console.log(error)
+        res.status(200).json({status : "fail", message : error})
     }
 }
 const createAllTours = async(req, res) => {
     try {
-        const Tour = await Tours.create(req.body)
-        console.log(Tour, "Hello")
-        res.status(200).json("Hello Made It")
+        const tour = await Tours.create(req.body)
+        res.status(200).json({status : "success", data : {tour}})
     } catch (error) {
-        console.log(error)
+        res.status(200).json({status : "fail", message : error})
+
     }
 }
 const getTour = async(req, res) => {
     try {
-        res.status(200).json("Hello Made It")
+        const tour = await Tours.findById(req.params.id)
+        res.status(200).json({status : "success", data : {tour}})
     } catch (error) {
-        console.log(error)
+        res.status(200).json({status : "fail", message : error})
     }
 }
 const updateTour = async(req, res) => {

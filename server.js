@@ -7,11 +7,9 @@ app.get("/", (req, res) => {
 
 const port = process.env.PORT || 5000
 
-const MONGO_URI = "mongodb+srv://venkateshprasad:Venku9980809652!@nodeexpressprojects.akouw.mongodb.net/JonasCourse?retryWrites=true&w=majority"
-
 const start = async() => {
     try {
-        await connectDB(MONGO_URI)
+        await connectDB(process.env.MONGO_URI)
         app.listen(port, () => { 
             console.log(`App is listening on port ${port}...`)
         })
