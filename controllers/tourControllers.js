@@ -29,6 +29,7 @@ const createAllTours = async(req, res) => {
     try {
         const tour = await Tours.create(req.body)
         res.status(200).json({status : "success", data : {tour}})
+        console.log("Hello")
     } catch (error) {
         res.status(200).json({status : "fail", message : error})
 
