@@ -1,8 +1,9 @@
+const { findByIdAndUpdate } = require("../models/tourModel")
 const Tours = require("../models/tourModel")
 
 const checkId =(req, res, next, val) => {
     console.log(`The tour val is ${val}`)
-    if(req.params.id > 5){
+    if(!req.params.id){
         return res.status(404).send({status : "Invalid Id"})
     }
     next()
@@ -19,15 +20,18 @@ const checkBody = (req, res, next) => {
 const getAllTours = async(req, res) => {
     try {
         const tour = await Tours.find()
+
         if(!tour){
             res.status(404).json({status : "Not Found"})
         }
+
         res.status(200).json({status : "success", data : {tour}})
 
     } catch (error) {
         res.status(501).json({status : "fail", message : error})
     }
 }
+
 const createAllTours = async(req, res) => {
     try {
         const tour = await Tours.create(req.body)
@@ -52,18 +56,32 @@ const getTour = async(req, res) => {
 
     }
 }
-const updateTour = async(req, res) => {
+
+const updateTour = async (req, res) => {
     try {
-        res.status(200).json("Hello Made It")
+        const tour = await Tours.findByIdAndUpdate(req.params.id, req.body, {new : true})
+        // {new : true} gives you the updated object in return
+        if(!tour){
+            res.status(404).json({status : "Not Found"})
+        }
+        res.status(200).json({status : "success", data : {tour}})
+
     } catch (error) {
-        console.log(error)
+        res.status(501).json({status : "fail", message : error})
     }
 }
+
 const deleteTour = async(req, res) => {
     try {
-        res.status(200).json("Hello Made It")
+        const tour = await Tours.findByIdAndDelete(req.params.id)
+        // {new : true} gives you the updated object in return
+        if(!tour){
+            res.status(404).json({status : "Not Found"})
+        }
+        res.status(200).json({status : "success", data : {tour}})
+
     } catch (error) {
-        console.log(error)
+        res.status(501).json({status : "fail", message : error})
     }
 }
 
