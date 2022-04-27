@@ -19,28 +19,37 @@ const checkBody = (req, res, next) => {
 const getAllTours = async(req, res) => {
     try {
         const tour = await Tours.find()
+        if(!tour){
+            res.status(404).json({status : "Not Found"})
+        }
         res.status(200).json({status : "success", data : {tour}})
 
     } catch (error) {
-        res.status(200).json({status : "fail", message : error})
+        res.status(501).json({status : "fail", message : error})
     }
 }
 const createAllTours = async(req, res) => {
     try {
         const tour = await Tours.create(req.body)
+        if(!tour){
+            res.status(404).json({status : "Not Found"})
+        }
         res.status(200).json({status : "success", data : {tour}})
-        console.log("Hello")
     } catch (error) {
-        res.status(200).json({status : "fail", message : error})
+        res.status(501).json({status : "fail", message : error})
 
     }
 }
 const getTour = async(req, res) => {
     try {
         const tour = await Tours.findById(req.params.id)
+        if(!tour){
+            res.status(404).json({status : "Not Found"})
+        }
         res.status(200).json({status : "success", data : {tour}})
     } catch (error) {
-        res.status(200).json({status : "fail", message : error})
+        res.status(501).json({status : "fail", message : error})
+
     }
 }
 const updateTour = async(req, res) => {
