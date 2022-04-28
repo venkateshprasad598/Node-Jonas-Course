@@ -65,7 +65,7 @@ const updateTour = async (req, res) => {
             res.status(404).json({status : "Not Found"})
         }
         res.status(200).json({status : "success", data : {tour}})
-
+        
     } catch (error) {
         res.status(501).json({status : "fail", message : error})
     }
@@ -74,7 +74,7 @@ const updateTour = async (req, res) => {
 const deleteTour = async(req, res) => {
     try {
         const tour = await Tours.findByIdAndDelete(req.params.id)
-        // {new : true} gives you the updated object in return
+
         if(!tour){
             res.status(404).json({status : "Not Found"})
         }
