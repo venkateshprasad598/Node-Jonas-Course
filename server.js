@@ -1,6 +1,6 @@
 const app =  require("./app")
 const connectDB = require("./db/connect")
-
+require("./dev-data/data/import-dev-data")
 app.get("/", (req, res) => {
     res.status(200).json("Welcome To Home Page")
 })
