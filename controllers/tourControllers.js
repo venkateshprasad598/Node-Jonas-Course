@@ -20,13 +20,10 @@ const checkBody = (req, res, next) => {
 const getAllTours = async(req, res) => {
     try {
         const tour = await Tours.find()
-
         if(!tour){
             res.status(404).json({status : "Not Found"})
         }
-
         res.status(200).json({status : "success", data : {tour}})
-
     } catch (error) {
         res.status(501).json({status : "fail", message : error})
     }
@@ -57,6 +54,27 @@ const getTour = async(req, res) => {
     }
 }
 
+const getTourStats = async(req, res) => {
+    try {
+        const tour = await Tours.aggregate( [
+            // Stage 1: Filter pizza order documents by pizza size
+            {
+               $match: { ratingsAverage:{$gte : 4.5} }
+            },
+            // Stage 2: Group remaining documents by pizza name and calculate total quantity
+            {
+               $group: { _id: "$difficulty", num : {$sum :1}}
+            }
+         ] )
+        if(!tour){
+            res.status(404).json({status : "Not Found"})
+        }
+        res.status(200).json({status : "success", data : {tour}})
+    } catch (error) {
+        res.status(501).json({status : "fail", message : error})
+
+    }
+}
 const updateTour = async (req, res) => {
     try {
         const tour = await Tours.findByIdAndUpdate(req.params.id, req.body, {new : true})
@@ -86,4 +104,4 @@ const deleteTour = async(req, res) => {
 }
 
 
-module.exports = {getAllTours, createAllTours, getTour, updateTour, deleteTour, checkId, checkBody}
+module.exports = {getAllTours, createAllTours, getTour, updateTour, deleteTour, checkId, checkBody, getTourStats}
