@@ -75,6 +75,7 @@ const getTourStats = async(req, res) => {
 
     }
 }
+
 const updateTour = async (req, res) => {
     try {
         const tour = await Tours.findByIdAndUpdate(req.params.id, req.body, {new : true})
@@ -92,7 +93,7 @@ const updateTour = async (req, res) => {
 const deleteTour = async(req, res) => {
     try {
         const tour = await Tours.findByIdAndDelete(req.params.id)
-
+console.log(tour)
         if(!tour){
             res.status(404).json({status : "Not Found"})
         }
