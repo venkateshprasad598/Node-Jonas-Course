@@ -1,5 +1,6 @@
 const { findByIdAndUpdate } = require("../models/tourModel")
-const Tours = require("../models/tourModel")
+const Tour = require("../models/tourModel")
+const APIFeatures = require("../utils/apiFeatures")
 
 const checkId =(req, res, next, val) => {
     console.log(`The tour val is ${val}`)
@@ -19,19 +20,36 @@ const checkBody = (req, res, next) => {
 
 const getAllTours = async(req, res) => {
     try {
-        const tour = await Tours.find()
-        if(!tour){
-            res.status(404).json({status : "Not Found"})
-        }
-        res.status(200).json({status : "success", data : {tour}})
-    } catch (error) {
-        res.status(501).json({status : "fail", message : error})
-    }
+        // EXECUTE QUERY
+        const features = new APIFeatures(Tour.find(), req.query)
+          .filter()
+          .sort()
+          .limitFields()
+          .paginate();
+          console.log(features)
+          
+        const tours = await features.query;
+    console.log(tours);
+        // SEND RESPONSE
+        res.status(200).json({
+          status: 'success',
+          results: tours.length,
+          data: {
+            tours
+          }
+        });
+      } catch (err) {
+        res.status(404).json({
+          status: 'fail',
+          message: err
+        });
+      }
+   
 }
 
 const createAllTours = async(req, res) => {
     try {
-        const tour = await Tours.create(req.body)
+        const tour = await Tour.create(req.body)
         if(!tour){
             res.status(404).json({status : "Not Found"})
         }
@@ -43,7 +61,7 @@ const createAllTours = async(req, res) => {
 }
 const getTour = async(req, res) => {
     try {
-        const tour = await Tours.findById(req.params.id)
+        const tour = await Tour.findById(req.params.id)
         if(!tour){
             res.status(404).json({status : "Not Found"})
         }
@@ -56,7 +74,7 @@ const getTour = async(req, res) => {
 
 const getTourStats = async(req, res) => {
     try {
-        const tour = await Tours.aggregate( [
+        const tour = await Tour.aggregate( [
             // Stage 1: Filter pizza order documents by pizza size
             {
                $match: { ratingsAverage:{$gte : 4.5} }
@@ -78,7 +96,7 @@ const getTourStats = async(req, res) => {
 
 const updateTour = async (req, res) => {
     try {
-        const tour = await Tours.findByIdAndUpdate(req.params.id, req.body, {new : true})
+        const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {new : true})
         // {new : true} gives you the updated object in return
         if(!tour){
             res.status(404).json({status : "Not Found"})
@@ -92,7 +110,7 @@ const updateTour = async (req, res) => {
 
 const deleteTour = async(req, res) => {
     try {
-        const tour = await Tours.findByIdAndDelete(req.params.id)
+        const tour = await Tour.findByIdAndDelete(req.params.id)
 console.log(tour)
         if(!tour){
             res.status(404).json({status : "Not Found"})
