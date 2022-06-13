@@ -2,6 +2,9 @@ const { findByIdAndUpdate } = require("../models/tourModel")
 const Tour = require("../models/tourModel")
 const APIFeatures = require("../utils/apiFeatures")
 
+const catchAsync= require("../utils/catchAsync")
+const AppError = require("../utils/appError")
+
 const checkId =(req, res, next, val) => {
     console.log(`The tour val is ${val}`)
     if(!req.params.id){
@@ -18,7 +21,7 @@ const checkBody = (req, res, next) => {
     next()
 }
 
-const getAllTours = async(req, res) => {
+const getAllTours = async(req, res, next) => {
     try {
         // EXECUTE QUERY
         const features = new APIFeatures(Tour.find(), req.query)
@@ -29,7 +32,6 @@ const getAllTours = async(req, res) => {
           console.log(features)
           
         const tours = await features.query;
-    console.log(tours);
         // SEND RESPONSE
         res.status(200).json({
           status: 'success',
@@ -47,33 +49,43 @@ const getAllTours = async(req, res) => {
    
 }
 
-const createAllTours = async(req, res) => {
-    try {
+const createAllTours = catchAsync(async(req, res, next) => {
         const tour = await Tour.create(req.body)
         if(!tour){
-            res.status(404).json({status : "Not Found"})
+            next(new AppError(`No tour found`, 404));
         }
         res.status(200).json({status : "success", data : {tour}})
-    } catch (error) {
-        res.status(501).json({status : "fail", message : error})
+})
 
+
+// const getTour = catchAsync(async(req, res, next) => {
+//     console.log("ERROR")
+//     console.log("ERROR")
+//     const tour = await Tour.findById(req.params.id)
+//         console.log("ERROR")
+
+//         if(!tour){
+//             console.log("ERROR")
+//             return next(new AppError(`No tour found with that ID`, 404));
+//         }
+//         res.status(200).json({status : "success", data : {tour}})
+// })
+
+const getTour = catchAsync(async (req, res, next) => {
+    const tour = await Tour.findById(req.params.id);
+    // Tour.findOne({ _id: req.params.id })
+    if (!tour) {
+      return next(new AppError('No tour found with that ID', 404));
     }
-}
-const getTour = async(req, res) => {
-    try {
-        const tour = await Tour.findById(req.params.id)
-        if(!tour){
-            res.status(404).json({status : "Not Found"})
-        }
-        res.status(200).json({status : "success", data : {tour}})
-    } catch (error) {
-        res.status(501).json({status : "fail", message : error})
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour
+      }
+    });
+  });
 
-    }
-}
-
-const getTourStats = async(req, res) => {
-    try {
+const getTourStats = catchAsync( async (req, res, next) => {
         const tour = await Tour.aggregate( [
             // Stage 1: Filter pizza order documents by pizza size
             {
@@ -88,13 +100,10 @@ const getTourStats = async(req, res) => {
             res.status(404).json({status : "Not Found"})
         }
         res.status(200).json({status : "success", data : {tour}})
-    } catch (error) {
-        res.status(501).json({status : "fail", message : error})
+    
+})
 
-    }
-}
-
-const updateTour = async (req, res) => {
+const updateTour = catchAsync(async (req, res, next) => {
     try {
         const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {new : true})
         // {new : true} gives you the updated object in return
@@ -106,21 +115,17 @@ const updateTour = async (req, res) => {
     } catch (error) {
         res.status(501).json({status : "fail", message : error})
     }
-}
+})
 
-const deleteTour = async(req, res) => {
-    try {
+const deleteTour = catchAsync(async(req, res, next) => {
         const tour = await Tour.findByIdAndDelete(req.params.id)
-console.log(tour)
         if(!tour){
             res.status(404).json({status : "Not Found"})
         }
         res.status(200).json({status : "success", data : {tour}})
 
-    } catch (error) {
-        res.status(501).json({status : "fail", message : error})
-    }
-}
+   
+})
 
 
 module.exports = {getAllTours, createAllTours, getTour, updateTour, deleteTour, checkId, checkBody, getTourStats}

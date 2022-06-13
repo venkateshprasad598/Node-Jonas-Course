@@ -1,6 +1,6 @@
 const app =  require("./app")
 const connectDB = require("./db/connect")
-require("./dev-data/data/import-dev-data")
+// require("./dev-data/data/import-dev-data")
 app.get("/", (req, res) => {
     res.status(200).json("Welcome To Home Page")
 })
@@ -18,3 +18,11 @@ const start = async() => {
     }
 }
 start()
+
+// process.on('unhandledRejection', err => {
+//   console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+//   console.log(err.name, err.message);
+//   server.close(() => {
+//     process.exit(1);
+//   });
+// });

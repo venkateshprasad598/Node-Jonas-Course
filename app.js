@@ -1,7 +1,5 @@
 //DOTENV
 require("dotenv").config();
-
-
 const AppError = require("./utils/appError")
 const globalErrorHandler = require("./controllers/errorController")
 //PACKAGE IMPORTS
@@ -25,5 +23,4 @@ app.all("*", (req, res, next) => {
 });
 
 app.use(globalErrorHandler);
-
 module.exports = app;
