@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "env-cmd -f .env.dev nodemon server.js",
+    "start:dev": "env-cmd -f .env.dev npx nodemon server.js",
     "start:prod": "env-cmd -f .env.prod nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "debug": "ndb server.js"
@@ -27,7 +27,6 @@
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.0",
-    "nodemon": "^2.0.15",
     "validator": "^13.7.0"
   }
 }

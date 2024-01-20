@@ -1,0 +1,60 @@
+Data modeling in Mongo DB :  Data modeling in MongoDB refers to the 
+organization of data within the database and the relationships between related entities.
+
+MongoDB provides two types of data models: 
+1. the embedded data model (model allows related data to be stored within a single document,)
+2. the normalized data model (model stores related data in separate collections and uses references to access it.)
+
+
+1. Embedded Data Model:
+In this model, related data is stored within a single document. 
+For instance, in a blog application, a "user" document may contain
+an embedded "comments" array, where each comment is a sub-document. 
+This allows the application to retrieve all the necessary data with a 
+single query, making it efficient for read operations.
+
+Example  : {
+  "_id": 1,
+  "username": "user1",
+  "email": "user1@example.com",
+  "comments": [
+    {
+      "text": "This is a great post!",
+      "posted_at": ISODate("2023-01-15T10:30:00Z")
+    },
+    {
+      "text": "I enjoyed reading this.",
+      "posted_at": ISODate("2023-01-16T08:45:00Z")
+    }
+  ]
+}
+
+2. Normalized Data Model:
+In this model, related data is split into separate collections,
+ and references are used to access the related data. Using the same 
+ example, the "comments" would be stored in a separate collection, 
+ and the "user" document would contain references to the relevant comments.
+
+ Example : 
+ 
+ // User document
+{
+  "_id": 1,
+  "username": "user1",
+  "email": "user1@example.com",
+  "comments": [1, 2]
+}
+
+// Comments collection
+{
+  "_id": 1,
+  "text": "This is a great post!",
+  "posted_at": ISODate("2023-01-15T10:30:00Z"),
+  "user_id": 1
+}
+{
+  "_id": 2,
+  "text": "I enjoyed reading this.",
+  "posted_at": ISODate("2023-01-16T08:45:00Z"),
+  "user_id": 1
+}
