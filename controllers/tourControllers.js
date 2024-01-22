@@ -4,6 +4,7 @@ const APIFeatures = require("../utils/apiFeatures");
 
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
+const { deleteOne } = require("./handleFactory");
 
 const checkId = (req, res, next, val) => {
   console.log(`The tour val is ${val}`);
@@ -116,13 +117,7 @@ const updateTour = catchAsync(async (req, res, next) => {
   }
 });
 
-const deleteTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findByIdAndDelete(req.params.id);
-  if (!tour) {
-    res.status(404).json({ status: "Not Found" });
-  }
-  res.status(200).json({ status: "success", data: { tour } });
-});
+const deleteTour = deleteOne(Tour);
 
 module.exports = {
   getAllTours,
