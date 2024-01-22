@@ -16,6 +16,7 @@ const { protect } = require("../controllers/auth.controller");
 const reviewRouter = require("./reviewRoutes");
 
 router.use("/:id/reviews", reviewRouter);
+
 router.route("/").get(protect, getAllTours).post(checkBody, createAllTours);
 router.route("/stats").get(getTourStats);
 router.route("/:id").get(getTour).patch(updateTour).delete(deleteTour);

@@ -1,7 +1,12 @@
 const Review = require("../models/reviewModel");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
-const { deleteOne } = require("./handleFactory");
+const {
+  deleteOne,
+  updateOne,
+  createOneOrMany,
+  getOne,
+} = require("./handleFactory");
 
 const checkReviewBody = (req, res, next) => {
   const { review, rating } = req.body;
@@ -9,12 +14,25 @@ const checkReviewBody = (req, res, next) => {
     return res.status(400).send({ status: "Review or rating is missing" });
   next();
 };
+
+const checkReviewRequest = (req, res, next) => {
+  if (!req.body.tour) req.body.tour = req.params.id;
+  if (!req.body.user) req.body.user = req.user.id;
+  next();
+};
+
+//Review Control Functions
+const createReview = createOneOrMany(Review);
+const getReview = getOne(Review);
+const updateReview = updateOne(Review);
+const deleteReview = deleteOne(Review);
+
 const getAllReviewsOfSingleTour = async (req, res, next) => {
   try {
     let filterReviews = {};
     if (req.params.id) filterReviews = { tour: req.params.id };
+
     const reviews = await Review.find(filterReviews);
-    console.log({ reviews });
 
     if (!reviews) {
       next(new AppError("No Review Found", 404));
@@ -34,23 +52,12 @@ const getAllReviewsOfSingleTour = async (req, res, next) => {
   }
 };
 
-const createReview = catchAsync(async (req, res, next) => {
-  if (!req.body.tour) req.body.tour = req.params.id;
-  if (!req.body.user) req.body.user = req.user.id;
-
-  const review = await Review.create(req.body);
-
-  if (!review) {
-    next(new AppError("No Review Found", 404));
-  }
-  res.status(200).json({ status: "success", data: { review } });
-});
-
-const deleteReview = deleteOne(Review);
-
 module.exports = {
   getAllReviewsOfSingleTour,
   createReview,
   checkReviewBody,
   deleteReview,
+  updateReview,
+  getReview,
+  checkReviewRequest,
 };
