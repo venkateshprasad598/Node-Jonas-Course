@@ -1,0 +1,39 @@
+Mongoose Schemas: In Mongoose (a popular ODM for MongoDB), schema middleware allows injecting custom logic at specific points in a document's lifecycle (e.g., before saving, after updating, etc.). Here are some types of Mongoose schema middleware:
+
+Pre hooks: Execute before a specific operation (e.g., pre('save')).
+Post hooks: Execute after a specific operation (e.g., post('remove')).
+Validation middleware: Define custom validation logic for schema fields.
+Middleware functions: Reusable functions used in different hooks.
+
+Document's lifecycle.
+
+A document's lifecycle in a Mongoose schema is like a journey it takes within your database, with different stages at which you can inject custom logic using middleware. Here's a breakdown of the lifecycle and its corresponding middleware types:
+
+Stages:
+
+1. Validation: 
+
+Before any data is saved, Mongoose validates it against the schema's constraints. You can define custom validation logic using:
+
+Validation middleware: Define functions that perform additional checks and throw errors if necessary.
+Validators on schema fields: Specify validation rules directly on your schema fields (e.g., required, min length, etc.).
+
+2. Saving: 
+
+When save is called on a document, it gets persisted in the database. You can use:
+
+Pre-save hooks: Run custom logic before the document is actually saved, like generating timestamps or performing calculations.
+Post-save hooks: Execute code after the document is saved, like sending notifications or updating related documents.
+
+3. Updating: 
+
+You can modify existing documents using methods like findOneAndUpdate. For updates, you can use:
+
+Pre-update hooks: Perform logic before the update operation, like checking permissions or validating the updated data.
+Post-update hooks: Run code after the update, like sending data to external services or logging changes
+
+Deleting: 
+
+Documents can be removed using methods like remove or deleteOne. You can use:
+
+

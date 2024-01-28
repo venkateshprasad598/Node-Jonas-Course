@@ -1,0 +1,63 @@
+Document Middleware and query middleware and schema methods:
+
+Choosing the appropriate Mongoose middleware (hooks) or schema methods depends on the specific requirements of your application. Here's a general guideline on when to use certain hooks and methods based on different scenarios:
+
+Document Middleware:
+
+* Pre-Save Hook (pre('save', ...))
+When to Use: Use this when you want to execute logic before saving a document to the database. Common use cases include data validation, pre-processing, or modifying data.
+
+* Post-Save Hook (post('save', ...))
+When to Use: Use this when you need to perform actions after a document has been successfully saved. This could include sending notifications, updating related documents, or logging.
+
+* Pre-Validation Hook (pre('validate', ...))
+When to Use: Use this if you have additional validation logic that should run before the built-in validation. For example, formatting or cleaning up data before it's validated.
+
+
+* Post-Validation Hook (post('validate', ...))
+When to Use: Use this if you need to perform actions after the document has been validated. This might be useful for logging or additional checks.
+
+* Pre-Remove Hook (pre('remove', ...))
+When to Use: Use this when you need to perform actions before a document is removed from the database. This could include cleaning up related data or triggering additional processes.
+
+
+* Post-Remove Hook (post('remove', ...))
+When to Use: Use this when you need to perform actions after a document has been removed from the database. This might include cleaning up references in other collections or triggering additional processes.
+Query Middleware:
+
+* Pre-Find Hook (pre('find', ...))
+When to Use: Use this if you need to perform actions before a find query is executed. This could include modifying the query parameters or performing additional checks.
+
+* Post-Find Hook (post('find', ...))
+When to Use: Use this if you need to perform actions after a find query has been executed. For example, logging or post-processing the retrieved documents.
+
+* Pre-FindOne Hook (pre('findOne', ...))
+When to Use: Use this if you need to perform actions before a findOne query is executed. Similar to pre('find', ...), but specific to finding a single document.
+
+* Post-FindOne Hook (post('findOne', ...))
+When to Use: Use this if you need to perform actions after a findOne query has been executed. Similar to post('find', ...), but specific to finding a single document.
+
+* Pre-FindOneAndUpdate Hook (pre('findOneAndUpdate', ...))
+When to Use: Use this if you need to perform actions before a findOneAndUpdate query is executed. This might include modifying the update parameters or performing additional checks.
+
+* Post-FindOneAndUpdate Hook (post('findOneAndUpdate', ...))
+When to Use: Use this if you need to perform actions after a findOneAndUpdate query has been executed. This might include post-processing the updated document or triggering additional processes.
+
+Schema Methods:
+
+* Custom Schema Method (Instance Method)
+When to Use: Use instance methods (e.g., yourMethodName) when you need to perform actions on a specific document instance. This is useful when you want to encapsulate functionality related to a single document.
+
+* Static Schema Method
+When to Use: Use static methods (e.g., yourStaticMethodName) when you need to perform actions on the entire collection or model. Static methods are useful for operations that don't depend on a specific document instance.
+
+Summary:
+
+Use pre-save and post-save hooks for operations related to document creation and saving.
+Use pre-update and post-update hooks for operations related to updating documents.
+Use pre-remove and post-remove hooks for operations related to document deletion.
+Use pre-validate and post-validate hooks for additional validation logic.
+Use pre-find and post-find hooks for actions related to finding documents.
+Use pre-findOne and post-findOne hooks for actions specific to finding a single document.
+Use pre-findOneAndUpdate and post-findOneAndUpdate hooks for actions related to updating a single document.
+Consider your application's specific needs and design your middleware and methods accordingly.

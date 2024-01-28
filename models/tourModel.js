@@ -142,6 +142,15 @@ const TourSchema = new mongoose.Schema(
   }
 );
 
+//Indexing for performance of filtering and mapping in docs
+// if we do nor give indexing it will map all docs and returns which ever is matched
+// if we give it a index, it will create a unique index for ir just like _id behind the scene and
+// returns with exact match without examining every object
+
+//Give index to such fields which ever you feel have filtering, mappig etc.
+
+TourSchema.index({ price: 1 });
+
 //DOCUMENT MIDDLEWARE : runs before .save() and .create()
 
 // In schema add this  - guides: Array (For embedding)

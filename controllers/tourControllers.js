@@ -7,6 +7,7 @@ const {
   updateOne,
   createOneOrMany,
   getOne,
+  getAll,
 } = require("./handleFactory");
 
 //Middlewares
@@ -28,34 +29,7 @@ const checkBody = (req, res, next) => {
 //Middlewares end's here
 
 //Route Functions
-const getAllTours = async (req, res, next) => {
-  try {
-    // EXECUTE QUERY
-    const features = new APIFeatures(Tour.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
-    console.log(features);
-
-    const tours = await features.query;
-
-    // SEND RESPONSE
-    res.status(200).json({
-      status: "success",
-      results: tours.length,
-      data: {
-        tours,
-      },
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
-  }
-};
-
+const getAllTours = getAll(Tour);
 const updateTour = updateOne(Tour);
 const deleteTour = deleteOne(Tour);
 const createAllTours = createOneOrMany(Tour);
