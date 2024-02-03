@@ -10,6 +10,7 @@ const app = express();
 const tourRouter = require("./routes/tourRoutes");
 const userRouter = require("./routes/userRoutes");
 const reviewRouter = require("./routes/reviewRoutes");
+const bookingRouter = require("./routes/bookingRoutes");
 
 //MiddleWare
 app.use(express.json());
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("/app/v1/tours", tourRouter);
 app.use("/app/v1/users", userRouter);
 app.use("/app/v1/reviews", reviewRouter);
+app.use("/app/v1/bookings", bookingRouter);
 
 app.all("*", (req, res, next) => {
   console.log("Hello");

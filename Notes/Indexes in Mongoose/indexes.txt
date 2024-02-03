@@ -1,0 +1,16 @@
+Indexes are data structures in MongoDB that improve the 
+speed of queries by allowing the database to quickly locate
+relevant documents without scanning the entire collection.
+In Mongoose, you can define indexes on your schemas to
+optimize queries for your application.
+
+There are two main types of indexes in Mongoose:
+1. Regular indexes: These indexes improve the performance of queries that sort or filter on the indexed field.
+2. Unique indexes: These indexes enforce uniqueness on the indexed field. This means that no two documents in the collection can have the same value for the indexed field.
+
+// Unique Property in Mongoose Schema vs Index
+* Both the schema unique property and the index unique property create unique indexes, but they have some key differences:
+1. Both options enforce uniqueness on the indexed field.
+2. Use the schema unique property for a simple and concise way to define unique indexes.
+3. Use the index unique property when you need more control over the index configuration.
+

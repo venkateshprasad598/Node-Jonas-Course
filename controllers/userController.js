@@ -2,7 +2,6 @@ const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 
 const getMe = (req, res, next) => {
-  console.log("Hllo get me");
   req.params.id = req.user.id;
   next();
 };
@@ -35,6 +34,7 @@ const getUser = async (req, res) => {
     console.log(error);
   }
 };
+
 const updateUser = async (req, res) => {
   try {
     res.status(200).json("Hello Made It");

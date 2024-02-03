@@ -13,13 +13,11 @@ When to Use: Use this when you need to perform actions after a document has been
 * Pre-Validation Hook (pre('validate', ...))
 When to Use: Use this if you have additional validation logic that should run before the built-in validation. For example, formatting or cleaning up data before it's validated.
 
-
 * Post-Validation Hook (post('validate', ...))
 When to Use: Use this if you need to perform actions after the document has been validated. This might be useful for logging or additional checks.
 
 * Pre-Remove Hook (pre('remove', ...))
 When to Use: Use this when you need to perform actions before a document is removed from the database. This could include cleaning up related data or triggering additional processes.
-
 
 * Post-Remove Hook (post('remove', ...))
 When to Use: Use this when you need to perform actions after a document has been removed from the database. This might include cleaning up references in other collections or triggering additional processes.

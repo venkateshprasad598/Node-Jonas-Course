@@ -117,6 +117,7 @@ const TourSchema = new mongoose.Schema(
       address: String,
       description: String,
     },
+
     locations: [
       {
         type: {
@@ -149,7 +150,9 @@ const TourSchema = new mongoose.Schema(
 
 //Give index to such fields which ever you feel have filtering, mappig etc.
 
-TourSchema.index({ price: 1 });
+TourSchema.index({ price: 1 }); // one indexing
+TourSchema.index({ price: 1, ratingsAverage: 1 }); // compound indexing
+TourSchema.index({ startLocation: "2dsphere" });
 
 //DOCUMENT MIDDLEWARE : runs before .save() and .create()
 
@@ -162,20 +165,25 @@ TourSchema.index({ price: 1 });
 //    next();
 //  });
 
-//QUERY MIDDLEWARE
-
-// this will run whenever find method runs
-TourSchema.pre(/^find/, function (next) {
-  // this = Tour.findById OR Tour.find()
-  this.populate("guides").populate("reviews");
-  next();
-});
-
 //Virtual Populate
 TourSchema.virtual("reviews", {
   ref: "Review", // model you want to reference
   foreignField: "tour", // in that model which field are you targeting
   localField: "_id", // take it's id and map it local id
+});
+
+TourSchema.virtual("bookings", {
+  ref: "Booking", // model you want to reference
+  foreignField: "tour", // in that model which field are you targeting
+  localField: "_id", // take it's id and map it local id
+});
+
+//QUERY MIDDLEWARE
+// this will run whenever find method runs
+TourSchema.pre(/^find/, function (next) {
+  // this = Tour.findById OR Tour.find()
+  this.populate("guides").populate("reviews").populate("bookings");
+  next();
 });
 
 //KEEP TOUR NAME IN CAPS

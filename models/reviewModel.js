@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Tour = require("./tourModel");
 
 const ReviewSchema = new mongoose.Schema(
   {
@@ -32,6 +33,9 @@ const ReviewSchema = new mongoose.Schema(
   }
 );
 
+//index
+ReviewSchema.index({ tour: 1, user: 1 }, { unique: true }); // In compound indexing, if there is any other object with same combination that duplicate error will be thrown.
+
 //QUERY MIDDLEWARE
 ReviewSchema.pre(/^find/, function (next) {
   this.populate({
@@ -39,6 +43,54 @@ ReviewSchema.pre(/^find/, function (next) {
     select: "name, email", // give me only name and emails
   });
   next();
+});
+
+// When someone adds review, calculate average of all reviews and update it in tours.
+ReviewSchema.statics.calcAverageRatings = async function (tourId) {
+  const stats = await this.aggregate([
+    {
+      $match: { tour: tourId },
+    },
+    {
+      $group: {
+        _id: "$tour",
+        nRating: { $sum: 1 },
+        avgRating: { $avg: "$rating" },
+      },
+    },
+  ]);
+  // console.log(stats);
+
+  if (stats.length > 0) {
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: stats[0].nRating,
+      ratingsAverage: stats[0].avgRating,
+    });
+  } else {
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: 0,
+      ratingsAverage: 4.5,
+    });
+  }
+};
+
+ReviewSchema.post("save", function () {
+  // this points to current review
+  this.constructor.calcAverageRatings(this.tour);
+});
+
+// for update and delete of a review, calculate average of all reviews and update it in tours.
+// findByIdAndUpdate
+// findByIdAndDelete
+ReviewSchema.pre(/^findOneAnd/, async function (next) {
+  this.r = await this.findOne();
+  // console.log(this.r);
+  next();
+});
+
+ReviewSchema.post(/^findOneAnd/, async function () {
+  // await this.findOne(); does NOT work here, query has already executed
+  await this.r.constructor.calcAverageRatings(this.r.tour);
 });
 
 // { "tour":"65ab635dcb177e97a20e96f7",

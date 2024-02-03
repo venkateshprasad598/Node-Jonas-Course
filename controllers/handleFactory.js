@@ -62,6 +62,7 @@ const updateOne = (Model) => {
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
+
     // {new : true} gives you the updated object in return
     if (!doc) {
       res.status(404).json({ status: "Not Found" });
